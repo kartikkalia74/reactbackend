@@ -1,7 +1,7 @@
 
 
 import * as express from 'express';
-import articleController from '../../controllers/articleController.ts'
+import articleController from '../../controllers/articleController'
 import {message} from '../../constant' 
 const articleRoutes = express.Router()
 
