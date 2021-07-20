@@ -4,13 +4,14 @@ import {message} from '../../constant'
 const userRoutes = express.Router()
 
 
-userRoutes.post("/",userController.Common.upload('./images/userprofile').single('file'),(req,res)=>{
-       console.log(req.body,req.file,req.files)
-       userController.addUser(JSON.parse(req.body.data),req.file).then((_result)=>{
-        res.status(201).json({message:message.CREATESUCCESS})
+userRoutes.get("/",(req,res)=>{
+
+   const query:{userId:string} = req.query as {userId:string}
+       userController.listUsers(query).then((_result)=>{
+        res.status(200).json({message:message.CREATESUCCESS , data:_result})
        }).catch((err)=>{
               console.log(err)
-        res.status(400).json({err})
+        res.status(500).json({err})
        })
 }
 )

@@ -1,5 +1,8 @@
 export const message =  {
-    "CreateSUCCESS":"Created successfully"
+    "CREATESUCCESS":"Created successfully",
+    "LOGINSUCCESS":"Login successfully" ,
+    "ADDSUCCESSFULLY":"Add Successfully",
+    "TRUEMESSAGE":"SUCCESSFUL"
 }
 
 

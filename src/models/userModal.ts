@@ -5,9 +5,11 @@ export interface IUser  {
     lastName :string,
     skills:[],
     hash:string,
+    about:string,
     salt:string ,
     email:string,
     password?:string
+    img:{type:String}
     validPassword :(password:string)=> boolean;
   }
   const modelName ='users'
@@ -20,16 +22,18 @@ export interface IUser  {
 const  userSchema = new  mongoose.Schema<IUser>({
     firstName :{type:String , required:true},
     lastName :{type:String,  required:true},
-    skills:{type:[] },
+    skills:{type:[mongoose.Types.ObjectId] ,ref:'skills'},
     hash:{type:String ,select:false},
     salt:{type:String , select:false},
     email:{type:String,  required:true},
     authToken:{type:String},
-    password:{type:String}
+    password:{type:String},
+    about:{type:String},
+    img:{type:String}
 },{timestamps:true }) 
 
 userSchema.path('email').validate(function(email){
-mongoose.model(modelName).findOne({email, _id:{$ne:this._id}}).count((count)=>!count).catch((err)=>{throw err})
+return mongoose.model(modelName).count({email, _id:{$ne:this._id}}).then((count)=>!count).catch((err)=>{throw err})
 },"user with `{VALUE}` already exists!")
 userSchema.pre<IUser>('save',function(next){
 console.log(this)

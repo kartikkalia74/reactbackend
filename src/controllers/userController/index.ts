@@ -1,5 +1,4 @@
 
-import user from '../../models/user';
 import Controller from '../../plugin/controller'
 
 class userController extends Controller {
@@ -12,12 +11,19 @@ class userController extends Controller {
         return new userController()
     }
 
-    async addUser ({firstName, lastName, skills,email, password}) {
+    async addUser ({firstName, lastName, skills,email,about, password},file) {
         try{
-            await new this.db.User({firstName, lastName, email,skills, password}).save()
+            let img =''
+            if(file.filename){
+                img=`/static/userprofile/${file.filename}`;
+            }
+            await new this.db.User({firstName, lastName, email,skills,img,about, password}).save()
 
         }catch(err){
-            throw err;            
+            if(err.errors){
+                throw this.Common.handleValidation(err);
+            }
+            throw err;          
         }
     }
 
@@ -26,7 +32,7 @@ class userController extends Controller {
        try{
         const user =  await this.db.User.findOne({email}).select('+hash')
         if(user && user.validPassword(password)){
-            return true;
+            return user;
         }
             throw new Error("Invalid username or password")
         
@@ -34,6 +40,15 @@ class userController extends Controller {
         throw err;
        }
         
+    }
+
+    async listUsers({userId}){
+        try{
+            const list =await this.db.User.find({_id:{$ne:userId}}).populate('skills')
+            return list;
+        }catch(err){
+            throw err;
+        }
     }
 
     async updateUser({
@@ -45,7 +60,7 @@ class userController extends Controller {
     }){
         const updateObj = {}
         if(email){
-            await user.findByIdAndUpdate()
+            await this.db.User.findByIdAndUpdate()
         }
     }
 }

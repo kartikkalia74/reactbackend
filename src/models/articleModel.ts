@@ -14,7 +14,7 @@ const articleSchema = new mongoose.Schema({
     title:{type:String , required: true},
     keywords:[Object],
     content:{type:String , required:true},
-    postedBy:{type:mongoose.Types.ObjectId, required:true},
+    postedBy:{type:mongoose.Types.ObjectId, ref:'users',required:true},
 })
 
 export default mongoose.model<Article>(modelName, articleSchema);

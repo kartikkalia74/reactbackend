@@ -1,6 +1,6 @@
-import User from '../../models/user';
-import Skill from '../../models/skills';
-import Article from '../../models/article';
+import User from '../../models/userModal';
+import Skill from '../../models/skillsModel';
+import Article from '../../models/articleModel';
 
 
 
