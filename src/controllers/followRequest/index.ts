@@ -7,13 +7,26 @@ class FollowRequestController extends Controller {
   /**
    * @description send request to other user
    */
-  sendRequest({ sendBy, sendTo }) {}
+  async sendRequest({ sendBy, sendTo }) {
+    try{
+      await new this.db.FollowRequest({sendBy , sendTo}).save()
+    }catch(err){
+      throw err;
+    }
+  }
 
   /**
    * @description respond to follow requst
    * @param param0
    */
-  respondToRequest({ requestId, status }) {}
+  async respondToRequest({ requestId, status }) {
+    try{
+      await  this.db.FollowRequest.findByIdAndUpdate(requestId,{$set:{status}})
+    }catch(err){
+      throw err;
+    }
+    
+  }
 }
 
 export default FollowRequestController.getInstance();

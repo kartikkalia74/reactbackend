@@ -42,6 +42,27 @@ class userController extends Controller {
         
     }
 
+    /**
+     * [
+{$lookup:{from:"followrequests",
+   let:{userId:"$_id"},
+   pipeline:[{$match:{$expr:{$or:[{$eq:["$sendBy","$$userId"]},{$eq:["$sendTo","$$userId"]}]}}}],
+    as:"request"
+    
+    }},
+    {$unwind:{path:"$request", preserveNullAndEmptyArrays:true}},
+    {$addFields:{status:{
+        $switch:{
+            branches:[{case:{$eq:["$request.sendBy","$_id"]}, then:1},
+            {case:{$eq:["$request.sendTo","$_id"]}, then:2}
+            ],
+            default:'op'
+            }
+        }}},
+    ]
+     * @param param0 
+     * @returns 
+     */
     async listUsers({userId}){
         try{
             const list =await this.db.User.find({_id:{$ne:userId}}).populate('skills')
