@@ -65,8 +65,40 @@ class userController extends Controller {
      */
     async listUsers({userId}){
         try{
-            const list =await this.db.User.find({_id:{$ne:userId}}).populate('skills')
-            return list;
+            const list =await this.db.User.aggregate([
+                
+                {$match:{_id:{$ne:this.mongoose.Types.ObjectId(userId)}}},
+                {$lookup:{from:"followrequests",
+            let:{userId:"$_id"},
+            pipeline:[{$match:{$expr:{$or:[{$eq:["$sendBy","$$userId"]},{$eq:["$sendTo","$$userId"]}]}}}],
+             as:"request"
+             
+             }},
+             {$unwind:{path:"$request", preserveNullAndEmptyArrays:true}},
+             {$match:{"request.status":{$nin:[1,2]}}},
+             {$addFields:{status:{
+                 $switch:{
+                     branches:[{case:{$eq:["$request.sendBy","$_id"]}, then:1},
+                     {case:{$eq:["$request.sendTo","$_id"]}, then:2}
+                     ],
+                     default:0
+                     }
+                 }}},
+
+                 {$lookup:{from:"skills",
+    localField:"skills",
+    foreignField:"_id",
+    as:"skills"
+    }},
+    {$project:{firstName:1, lastName:1,skills:1,status:1,img:1,about:1}},
+{$facet:{
+    requestSend:[{$match:{status:1}}],
+     newRequest:[{$match:{status:2}}],
+     suggestPeople:[{$match:{status:0}}]
+    }}    
+    
+             ])
+            return list[0];
         }catch(err){
             throw err;
         }
