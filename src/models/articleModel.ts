@@ -12,7 +12,7 @@ interface Article {
 
 const articleSchema = new mongoose.Schema({
     title:{type:String , required: true},
-    keywords:[Object],
+    keywords:{type:mongoose.Types.ObjectId, ref:'skills'},
     content:{type:String , required:true},
     postedBy:{type:mongoose.Types.ObjectId, ref:'users',required:true},
 })
