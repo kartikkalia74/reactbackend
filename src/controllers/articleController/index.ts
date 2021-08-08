@@ -11,10 +11,10 @@ class ArticleController extends Controller {
         return new ArticleController()
     }
 
-    async addArticle ({title,content,keyword,postedBy}) {
+    async addArticle ({title,content,keywords,postedBy}) {
         try{
             debugger
-            await new this.db.Article({title,content,keyword, postedBy}).save()
+            await new this.db.Article({title,content,keywords, postedBy}).save()
 
         }catch(err){
             if(err.errors){
@@ -26,7 +26,7 @@ class ArticleController extends Controller {
 
     async listArticle(){
         try{
-            return await this.db.Article.find({}).populate('postedBy','firstName lastName')
+            return await this.db.Article.find({}).populate('keywords').populate('postedBy','firstName lastName')
         }catch(err){
             throw err
         }

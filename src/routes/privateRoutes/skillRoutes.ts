@@ -12,7 +12,7 @@ post(skillController.Common.upload('./images/skills').single('file'),(req,res)=>
     })
 }
 ).get((req,res)=>{
-    skillController.listSkill().then((_result)=>{
+    skillController.listSkill(req.query).then((_result)=>{
      res.status(200).json({message:message.TRUEMESSAGE ,data:_result})
     }).catch((err)=>{
      res.status(500).json({err})

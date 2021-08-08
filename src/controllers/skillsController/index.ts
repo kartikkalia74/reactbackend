@@ -25,9 +25,14 @@ class SkillController extends Controller {
         }
     }
 
-    async listSkill(){
+    async listSkill(data){
         try{
-            return await this.db.Skill.find({})
+            let qry ={};
+            if(data.name){
+                qry['name'] = new RegExp(data.name,'i')
+
+            }
+            return await this.db.Skill.find(qry);
         }catch(err){
             throw err
         }

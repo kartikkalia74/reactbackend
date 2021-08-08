@@ -5,7 +5,7 @@ const init = () => {
         if(error){
             console.log('database exited')
         }else {
-            console.log('database connecyed')
+            console.log('database connected')
         }
     
     })

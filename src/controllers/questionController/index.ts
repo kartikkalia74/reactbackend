@@ -11,10 +11,10 @@ class QuestionController extends Controller {
         return new QuestionController()
     }
 
-    async addQuestion ({title,content,keyword,postedBy}) {
+    async addQuestion ({title,content,keywords,postedBy}) {
         try{
             
-            await new this.db.QuestionRequest({title,content,keyword, postedBy}).save()
+            await new this.db.QuestionRequest({title,content,keywords, postedBy}).save()
 
         }catch(err){
             if(err.errors){
@@ -26,7 +26,7 @@ class QuestionController extends Controller {
 
     async listQuestion(){
         try{
-            return await this.db.QuestionRequest.find({}).populate('postedBy','firstName lastName')
+            return await this.db.QuestionRequest.find({}).populate('keywords').populate('postedBy','firstName lastName')
         }catch(err){
             throw err
         }   
